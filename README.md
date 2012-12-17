@@ -1,7 +1,7 @@
 # RequestStore [![build status](https://secure.travis-ci.org/steveklabnik/request_store.png?branch=master)](https://secure.travis-ci.org/steveklabnik/request_store) [![Code Climate](https://codeclimate.com/badge.png)](https://codeclimate.com/github/steveklabnik/request_store)
 
 Ever needed to use a global variable in Rails? Ugh, that's the worst. If you
-need gobal state, you've probably reached for `Thread.current`. Like this:
+need global state, you've probably reached for `Thread.current`. Like this:
 
 ```
 def self.foo
