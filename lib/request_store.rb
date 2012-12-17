@@ -1,5 +1,7 @@
 require "request_store/version"
 
+require "request_store/railtie" if defined?(Rails)
+
 module RequestStore
   def self.store
     Thread.current[:request_store] ||= {}
@@ -13,7 +15,7 @@ module RequestStore
     
     def call(env)
       Thread.current[:request_store] = {}
-      @app.call
+      @app.call(env)
     end
   end
 end
