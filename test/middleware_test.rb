@@ -10,6 +10,6 @@ class MiddlewareTest < Minitest::Unit::TestCase
     middleware.call({})
     middleware.call({})
 
-    assert_equal 1, Thread.current[:request_store][:foo]
+    assert_equal 1, RequestStore.store[:foo]
   end
 end
