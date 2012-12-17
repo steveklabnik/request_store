@@ -1,9 +1,8 @@
 require "request_store/version"
 
 module RequestStore
-  @store = {}
-
   def self.store
-    @store
+    Thread.current[:request_store] ||= {}
+    Thread.current[:request_store]
   end
 end

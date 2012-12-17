@@ -8,4 +8,9 @@ class RequestStoreTest < Minitest::Unit::TestCase
     assert_equal 1, RequestStore.store[:foo]
     assert_equal 1, RequestStore.store.fetch(:foo)
   end
+
+  def test_delegates_to_thread
+    RequestStore.store[:foo] = 1
+    assert_equal 1, Thread.current[:request_store][:foo]
+  end
 end
