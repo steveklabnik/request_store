@@ -5,7 +5,7 @@ module RequestStore
     end
 
     def call(env)
-      Thread.current[:request_store] = {}
+      RequestStore.clear
       @app.call(env)
     end
   end
