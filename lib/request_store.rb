@@ -1,5 +1,9 @@
 require "request_store/version"
 
 module RequestStore
-  # Your code goes here...
+  @store = {}
+
+  def self.store
+    @store
+  end
 end
