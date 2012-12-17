@@ -1,24 +1,70 @@
 # RequestStore
 
-RequestStore gives you per-request global storage.
+Ever needed to use a global variable in Rails? Ugh, that's the worst. If you
+need gobal state, you've probably reached for `Thread.current`. Like this:
 
-## Installation
+```
+def self.foo
+  Thread.current[:foo] ||= 0
+end
+
+def self.foo=(value)
+  Thread.current[:foo] = value
+end
+```
+
+Ugh! I hate it. But you gotta do what you gotta do...
+
+### The problem
+
+Everyone's worrying about concurrency these days. So people are using those
+fancy threaded web servers, like Thin or Puma. But if you use `Thread.current`,
+and you use one of those servers, watch out! Values can stick around longer
+than you'd expect, and this can cause bugs. For example, if we had this in
+our controller:
+
+```
+def index
+  Thread.current[:counter] ||= 0
+  Thread.current[:counter] += 1
+  
+  render :text => Thread.current[:counter]
+end
+```
+
+If we ran this on MRI with Webrick, you'd get `1` as output, every time. But if
+you run it with Thin, you get `1`, then `2`, then `3`...
+
+### The solution
 
 Add this line to your application's Gemfile:
 
     gem 'request_store'
 
-And then execute:
+And change the code to this:
 
-    $ bundle
+```
+def index
+  RequestStore.store[:foo] ||= 0
+  RequestStore.store[:foo] += 1
 
-Or install it yourself as:
+  render :text => RequestStore.store[:foo]
+end
+```
 
-    $ gem install request_store
+Yep, everywhere you used `Thread.current` just change it to
+`RequestStore.store`. Now no matter what server you use, you'll get `1` every
+time: the storage is local to that request.
 
-## Usage
+### No Rails? No Problem!
 
-TODO: Write usage instructions here
+A Railtie is added that configures the Middleware for you, but if you're not
+using Rails, no biggie! Just use the Middelware yourself, however you need.
+You'll probably have to shove this somewhere:
+
+```
+use RequestStore::Middleware
+```
 
 ## Contributing
 
@@ -27,3 +73,5 @@ TODO: Write usage instructions here
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create new Pull Request
+
+Don't forget to run the tests with `rake`.
