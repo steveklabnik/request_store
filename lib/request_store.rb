@@ -7,7 +7,7 @@ module RequestStore
     Thread.current[:request_store]
   end
 
-  def self.init_or_clear
+  def self.clear!
     Thread.current[:request_store] = {}
   end
 end
