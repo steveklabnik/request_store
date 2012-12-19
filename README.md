@@ -66,6 +66,14 @@ You'll probably have to shove this somewhere:
 use RequestStore::Middleware
 ```
 
+### No Rack? No Problem!
+
+If you don't use the Middleware, for example in a raketask or test, you need to do this before first usage:
+
+```
+RequestStore.clear!
+```
+
 ## Contributing
 
 1. Fork it
