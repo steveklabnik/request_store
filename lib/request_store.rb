@@ -11,3 +11,5 @@ module RequestStore
     Thread.current[:request_store] = {}
   end
 end
+
+RequestStore.clear!
