@@ -4,7 +4,7 @@ require "request_store/railtie" if defined?(Rails)
 
 module RequestStore
   def self.store
-    Thread.current[:request_store]
+    Thread.current[:request_store] ||= {}
   end
 
   def self.clear!
