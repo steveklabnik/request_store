@@ -56,6 +56,19 @@ Yep, everywhere you used `Thread.current` just change it to
 `RequestStore.store`. Now no matter what server you use, you'll get `1` every
 time: the storage is local to that request.
 
+### Rails 2 compatibility
+
+The gem includes a Railtie that will configure everything properly for Rails 3+
+apps, but if your app is tied to an older (2.x) version, you will have to
+manually add the middleware yourself.  Typically this should just be a matter
+of adding:
+
+```
+config.middleware.use RequestStore::Middleware
+```
+
+into your config/environment.rb.
+
 ### No Rails? No Problem!
 
 A Railtie is added that configures the Middleware for you, but if you're not

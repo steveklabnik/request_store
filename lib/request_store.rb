@@ -1,6 +1,6 @@
 require "request_store/version"
 require "request_store/middleware"
-require "request_store/railtie" if defined?(Rails)
+require "request_store/railtie" if defined?(Rails) && Rails.version.to_i > 2
 
 module RequestStore
   def self.store
