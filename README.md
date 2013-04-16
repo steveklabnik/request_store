@@ -3,7 +3,7 @@
 Ever needed to use a global variable in Rails? Ugh, that's the worst. If you
 need global state, you've probably reached for `Thread.current`. Like this:
 
-```
+```ruby
 def self.foo
   Thread.current[:foo] ||= 0
 end
@@ -23,7 +23,7 @@ and you use one of those servers, watch out! Values can stick around longer
 than you'd expect, and this can cause bugs. For example, if we had this in
 our controller:
 
-```
+```ruby
 def index
   Thread.current[:counter] ||= 0
   Thread.current[:counter] += 1
@@ -39,11 +39,13 @@ you run it with Thin, you get `1`, then `2`, then `3`...
 
 Add this line to your application's Gemfile:
 
-    gem 'request_store'
+```ruby
+gem 'request_store'
+```
 
 And change the code to this:
 
-```
+```ruby
 def index
   RequestStore.store[:foo] ||= 0
   RequestStore.store[:foo] += 1
@@ -63,7 +65,7 @@ apps, but if your app is tied to an older (2.x) version, you will have to
 manually add the middleware yourself.  Typically this should just be a matter
 of adding:
 
-```
+```ruby
 config.middleware.use RequestStore::Middleware
 ```
 
@@ -75,7 +77,7 @@ A Railtie is added that configures the Middleware for you, but if you're not
 using Rails, no biggie! Just use the Middleware yourself, however you need.
 You'll probably have to shove this somewhere:
 
-```
+```ruby
 use RequestStore::Middleware
 ```
 
