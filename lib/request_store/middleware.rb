@@ -5,8 +5,9 @@ module RequestStore
     end
 
     def call(env)
-      RequestStore.clear!
       @app.call(env)
+    ensure
+      RequestStore.clear!
     end
   end
 end
