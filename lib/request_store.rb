@@ -35,4 +35,8 @@ module RequestStore
 		store[key] = yield unless exist?(key)
 		store[key]
 	end
+
+	def self.delete(key, &block)
+		store.delete(key, &block)
+	end
 end
