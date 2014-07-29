@@ -48,6 +48,13 @@ class RequestStoreTest < Minitest::Unit::TestCase
     assert_equal 2, RequestStore.fetch(:foo) { 2 + 2 }
   end
 
+  def test_delete
+    RequestStore.clear!
+    assert_equal 2, RequestStore.fetch(:foo) { 1 + 1 }
+    assert_equal 2, RequestStore.delete(:foo) { 2 + 2 }
+    assert_equal 4, RequestStore.delete(:foo) { 2 + 2 }
+  end
+
   def test_delegates_to_thread
     RequestStore.clear!
     RequestStore.store[:foo] = 1
