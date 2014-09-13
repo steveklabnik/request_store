@@ -16,14 +16,11 @@ class MiddlewareTest < Minitest::Test
   end
 
   def test_middleware_resets_store_on_error
-    errors = []
-    begin
+    e = assert_raises RuntimeError do
       @middleware.call({:error => true})
-    rescue => e
-      errors << e
     end
 
-    assert_equal ['FAIL'], errors.map(&:message)
+    assert_equal 'FAIL', e.message
     assert_equal({}, RequestStore.store)
   end
 end
