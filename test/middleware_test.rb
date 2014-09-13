@@ -2,7 +2,7 @@ require 'minitest/autorun'
 
 require 'request_store'
 
-class MiddlewareTest < Minitest::Unit::TestCase
+class MiddlewareTest < Minitest::Test
   def setup
     @app = RackApp.new
     @middleware = RequestStore::Middleware.new(@app)

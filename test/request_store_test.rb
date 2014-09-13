@@ -2,7 +2,7 @@ require 'minitest/autorun'
 
 require 'request_store'
 
-class RequestStoreTest < Minitest::Unit::TestCase
+class RequestStoreTest < Minitest::Test
   def test_initial_state
     Thread.current[:request_store] = nil
     assert_equal RequestStore.store, Hash.new
