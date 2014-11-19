@@ -81,6 +81,23 @@ You'll probably have to shove this somewhere:
 use RequestStore::Middleware
 ```
 
+#### No Rails + Rack::Test
+
+In order to have `RequestStore` storage cleared between requests, add it to the
+`app`:
+
+```ruby
+# spec_helper.rb
+
+def app
+  Rack::Builder.new do
+    use RequestStore::Middleware
+    run MyApp
+  end
+end
+```
+
+
 ## Contributing
 
 1. Fork it
