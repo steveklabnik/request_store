@@ -1,7 +1,6 @@
 require "request_store/version"
 require "request_store/middleware"
 require "request_store/railtie" if defined?(Rails::Railtie)
-require "forwardable"
 
 module RequestStore
   extend self
