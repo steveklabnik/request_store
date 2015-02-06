@@ -6,6 +6,12 @@ module RequestStore
       else
         app.config.middleware.insert_after Rack::MethodOverride, RequestStore::Middleware
       end
+
+      if ActionDispatch.const_defined?(:Reloader) && ActionDispatch::Reloader.respond_to?(:to_cleanup)
+        ActionDispatch::Reloader.to_cleanup do
+          RequestStore.clear!
+        end
+      end
     end
   end
 end
