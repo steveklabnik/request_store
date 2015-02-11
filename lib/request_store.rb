@@ -3,40 +3,25 @@ require "request_store/middleware"
 require "request_store/railtie" if defined?(Rails::Railtie)
 
 module RequestStore
-  def self.store
+  extend self
+  extend Forwardable
+
+  def_delegators :store, :[], :[]=, :delete, :key?
+
+  alias_method :read, :[]
+  alias_method :write, :[]=
+  alias_method :exist?, :key?
+
+  def store
     Thread.current[:request_store] ||= {}
   end
 
-  def self.clear!
+  def clear!
     Thread.current[:request_store] = {}
   end
 
-  def self.read(key)
-    store[key]
-  end
-
-  def self.[](key)
-    store[key]
-  end
-
-  def self.write(key, value)
-    store[key] = value
-  end
-
-  def self.[]=(key, value)
-    store[key] = value
-  end
-
-  def self.exist?(key)
-    store.key?(key)
-  end
-
-  def self.fetch(key, &block)
+  def fetch(key, &block)
     store[key] = yield unless exist?(key)
     store[key]
-  end
-
-  def self.delete(key, &block)
-    store.delete(key, &block)
   end
 end
