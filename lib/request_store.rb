@@ -15,16 +15,13 @@ module RequestStore
     store[key]
   end
 
-  def self.[](key)
-    store[key]
-  end
-
   def self.write(key, value)
     store[key] = value
   end
 
-  def self.[]=(key, value)
-    store[key] = value
+  class << self
+    alias_method :[], :read
+    alias_method :[]=, :write
   end
 
   def self.exist?(key)
