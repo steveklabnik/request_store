@@ -97,6 +97,23 @@ def app
 end
 ```
 
+## Semantic Versioning
+
+This project conforms to [semver](http://semver.org/). As a result of this
+policy, you can (and should) specify a dependency on this gem using the
+[Pessimistic Version Constraint](http://guides.rubygems.org/patterns/) with
+two digits of precision. For example:
+
+```ruby
+spec.add_dependency 'request_store', '~> 1.0'
+```
+
+This means your project is compatible with request_store 1.0 up until 2.0.
+You can also set a higher minimum version:
+
+```ruby
+spec.add_dependency 'request_store', '~> 1.1'
+```
 
 ## Contributing
 
