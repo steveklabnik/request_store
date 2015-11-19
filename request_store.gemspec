@@ -11,6 +11,7 @@ Gem::Specification.new do |gem|
   gem.description   = %q{RequestStore gives you per-request global storage.}
   gem.summary       = %q{RequestStore gives you per-request global storage.}
   gem.homepage      = "http://github.com/steveklabnik/request_store"
+  gem.licenses      = ["MIT"]
 
   gem.files         = `git ls-files`.split($/)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
