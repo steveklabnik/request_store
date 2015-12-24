@@ -24,4 +24,22 @@ class MiddlewareTest < Minitest::Test
     assert_equal 'FAIL', e.message
     assert_equal({}, RequestStore.store)
   end
+
+  def test_middleware_begins_store
+    @middleware.call({})
+    assert_equal true, @app.store_active
+  end
+
+  def test_middleware_ends_store
+    @middleware.call({})
+    assert_equal false, RequestStore.active?
+  end
+
+  def test_middleware_ends_store_on_error
+    assert_raises RuntimeError do
+      @middleware.call({:error => true})
+    end
+
+    assert_equal false, RequestStore.active?
+  end
 end

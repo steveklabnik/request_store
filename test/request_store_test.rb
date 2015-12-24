@@ -56,4 +56,14 @@ class RequestStoreTest < Minitest::Test
     RequestStore.store[:foo] = 1
     assert_equal 1, Thread.current[:request_store][:foo]
   end
+
+  def test_active_state
+    assert_equal false, RequestStore.active?
+
+    RequestStore.begin!
+    assert_equal true, RequestStore.active?
+
+    RequestStore.end!
+    assert_equal false, RequestStore.active?
+  end
 end
