@@ -11,6 +11,18 @@ module RequestStore
     Thread.current[:request_store] = {}
   end
 
+  def self.begin!
+    Thread.current[:request_store_active] = true
+  end
+
+  def self.end!
+    Thread.current[:request_store_active] = false
+  end
+
+  def self.active?
+    Thread.current[:request_store_active] || false
+  end
+
   def self.read(key)
     store[key]
   end
