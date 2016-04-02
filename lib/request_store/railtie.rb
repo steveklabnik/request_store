@@ -7,7 +7,11 @@ module RequestStore
         app.config.middleware.insert_after Rack::MethodOverride, RequestStore::Middleware
       end
 
-      if ActionDispatch.const_defined?(:Reloader) && ActionDispatch::Reloader.respond_to?(:to_cleanup)
+      if ActiveSupport.const_defined?(:Reloader) && ActiveSupport::Reloader.respond_to?(:to_complete)
+        ActiveSupport::Reloader.to_complete do
+          RequestStore.clear!
+        end
+      elsif ActionDispatch.const_defined?(:Reloader) && ActionDispatch::Reloader.respond_to?(:to_cleanup)
         ActionDispatch::Reloader.to_cleanup do
           RequestStore.clear!
         end
