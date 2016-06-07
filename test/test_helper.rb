@@ -7,5 +7,7 @@ class RackApp
     @last_value = RequestStore.store[:foo]
     @store_active = RequestStore.active?
     raise 'FAIL' if env[:error]
+
+    [200, {}, ["response"]]
   end
 end
