@@ -25,7 +25,7 @@ class MiddlewareTest < Minitest::Test
 
   def test_middleware_resets_store_on_error
     e = assert_raises RuntimeError do
-      call_middleware error: true
+      call_middleware({:error => true})
     end
 
     assert_equal 'FAIL', e.message
@@ -45,7 +45,7 @@ class MiddlewareTest < Minitest::Test
 
   def test_middleware_ends_store_on_error
     assert_raises RuntimeError do
-      call_middleware error: true
+      call_middleware({:error => true})
     end
 
     assert_equal false, RequestStore.active?
