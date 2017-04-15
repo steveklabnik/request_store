@@ -52,3 +52,5 @@ module RequestStore
     store.delete(key, &block)
   end
 end
+
+RequestStore.clear!
