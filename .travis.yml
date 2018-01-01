@@ -9,7 +9,6 @@ rvm:
   - 2.2.3
   - jruby-18mode
   - jruby-19mode
-  - rbx-2
   - ruby-head
   - jruby-head
   - ree
