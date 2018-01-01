@@ -27,7 +27,7 @@ our controller:
 def index
   Thread.current[:counter] ||= 0
   Thread.current[:counter] += 1
-  
+
   render :text => Thread.current[:counter]
 end
 ```
@@ -96,6 +96,11 @@ def app
   end
 end
 ```
+
+## Using with Sidekiq
+This gem uses a Rack middleware to clear the store object after every request, but that doesn't translate well to background processing with [Sidekiq](https://github.com/mperham/sidekiq).
+
+A companion library, [request_store-sidekiq](https://rubygems.org/gems/request_store-sidekiq) creates a Sidekiq middleware that will ensure the store is cleared after each job is processed, for security and consistency with how this is done in Rack.
 
 ## Semantic Versioning
 
