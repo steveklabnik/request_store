@@ -43,7 +43,7 @@ module RequestStore
     store.key?(key)
   end
 
-  def self.fetch(key, &block)
+  def self.fetch(key)
     store[key] = yield unless exist?(key)
     store[key]
   end
