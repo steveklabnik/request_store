@@ -20,6 +20,13 @@ class RequestStoreTest < Minitest::Test
     assert_equal Hash.new, RequestStore.store
   end
 
+  def test_assign_store
+    store_obj = { test_key: 'test' }
+    RequestStore.store = store_obj
+    assert_equal 'test', RequestStore.store[:test_key]
+    assert_equal store_obj, RequestStore.store
+  end
+
   def test_clear
     RequestStore.store[:foo] = 1
     RequestStore.clear!
