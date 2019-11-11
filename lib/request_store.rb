@@ -7,6 +7,10 @@ module RequestStore
     Thread.current[:request_store] ||= {}
   end
 
+  def self.store=(store)
+    Thread.current[:request_store] = store
+  end
+
   def self.clear!
     Thread.current[:request_store] = {}
   end
