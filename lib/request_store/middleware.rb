@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rack/body_proxy'
 
 # A middleware that ensures the RequestStore stays around until

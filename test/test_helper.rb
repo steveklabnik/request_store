@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class RackApp
   attr_reader :last_value, :store_active
 
