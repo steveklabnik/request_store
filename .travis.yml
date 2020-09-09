@@ -12,6 +12,7 @@ rvm:
   - jruby-19mode
   - ruby-head
   - jruby-head
+  - truffleruby-head
 matrix:
   allow_failures:
     - rvm: ruby-head
