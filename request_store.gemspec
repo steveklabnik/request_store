@@ -10,7 +10,7 @@ Gem::Specification.new do |gem|
   gem.email         = ["steve@steveklabnik.com"]
   gem.description   = %q{RequestStore gives you per-request global storage.}
   gem.summary       = %q{RequestStore gives you per-request global storage.}
-  gem.homepage      = "http://github.com/steveklabnik/request_store"
+  gem.homepage      = "https://github.com/steveklabnik/request_store"
   gem.licenses      = ["MIT"]
 
   gem.files         = `git ls-files`.split($/)
