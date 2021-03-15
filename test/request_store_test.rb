@@ -1,13 +1,16 @@
-require 'minitest/autorun'
+# frozen_string_literal: true
 
+require 'minitest/autorun'
 require 'request_store'
 
 class RequestStoreTest < Minitest::Test
   def setup
+    RequestStore.begin!
     RequestStore.clear!
   end
 
   def teardown
+    RequestStore.end!
     RequestStore.clear!
   end
 
@@ -20,57 +23,41 @@ class RequestStoreTest < Minitest::Test
     assert_equal Hash.new, RequestStore.store
   end
 
-  def test_assign_store
-    store_obj = { test_key: 'test' }
-    RequestStore.store = store_obj
-    assert_equal 'test', RequestStore.store[:test_key]
-    assert_equal store_obj, RequestStore.store
+  def test_store
+    RequestStore.end!
+    RequestStore.store[:foo] = :bar
+    assert_equal Hash.new, RequestStore.store
+
+    RequestStore.begin!
+    RequestStore.store[:foo] = :bar
+    assert_equal Hash(foo: :bar), RequestStore.store
   end
 
-  def test_clear
-    RequestStore.store[:foo] = 1
+  def test_store=
+    assert_raises(ArgumentError) { RequestStore.store = nil }
+
+    RequestStore.store = { foo: :bar }
+    assert_equal :bar, RequestStore.store[:foo]
+    assert_equal Hash(foo: :bar), RequestStore.store
+  end
+
+  def test_clear!
+    RequestStore.store = { foo: :bar }
     RequestStore.clear!
     assert_equal Hash.new, RequestStore.store
   end
 
-  def test_quacks_like_hash
-    RequestStore.store[:foo] = 1
-    assert_equal 1, RequestStore.store[:foo]
-    assert_equal 1, RequestStore.store.fetch(:foo)
+  def test_begin!
+    RequestStore.begin!
+    assert_equal true, Thread.current[:request_store_active]
   end
 
-  def test_read
-    RequestStore.store[:foo] = 1
-    assert_equal 1, RequestStore.read(:foo)
-    assert_equal 1, RequestStore[:foo]
+  def test_end!
+    RequestStore.end!
+    assert_equal false, Thread.current[:request_store_active]
   end
 
-  def test_write
-    RequestStore.write(:foo, 1)
-    assert_equal 1, RequestStore.store[:foo]
-    RequestStore[:foo] = 2
-    assert_equal 2, RequestStore.store[:foo]
-  end
-
-  def test_fetch
-    assert_equal 2, RequestStore.fetch(:foo) { 1 + 1 }
-    assert_equal 2, RequestStore.fetch(:foo) { 2 + 2 }
-  end
-
-  def test_delete
-    assert_equal 2, RequestStore.fetch(:foo) { 1 + 1 }
-    assert_equal 2, RequestStore.delete(:foo) { 2 + 2 }
-    assert_equal 4, RequestStore.delete(:foo) { 2 + 2 }
-  end
-
-  def test_delegates_to_thread
-    RequestStore.store[:foo] = 1
-    assert_equal 1, Thread.current[:request_store][:foo]
-  end
-
-  def test_active_state
-    assert_equal false, RequestStore.active?
-
+  def test_active?
     RequestStore.begin!
     assert_equal true, RequestStore.active?
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module RequestStore
   class Railtie < ::Rails::Railtie
     initializer "request_store.insert_middleware" do |app|
