@@ -17,12 +17,13 @@ module RequestStore
       RequestStore.begin!
 
       status, headers, body = @app.call(env)
-      returned = true
 
       body = Rack::BodyProxy.new(body) do
         RequestStore.end!
         RequestStore.clear!
       end
+      
+      returned = true
 
       [status, headers, body]
     ensure
