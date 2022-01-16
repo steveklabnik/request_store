@@ -58,6 +58,16 @@ Yep, everywhere you used `Thread.current` just change it to
 `RequestStore.store`. Now no matter what server you use, you'll get `1` every
 time: the storage is local to that request.
 
+### API
+
+The `fetch` method returns the stored value if it already exists. If no stored value exists, it uses the provided block to add a new stored value.
+
+```ruby
+top_posts = RequestStore.fetch(:top_posts) do
+  # code to obtain the top posts
+end
+```
+
 ### Rails 2 compatibility
 
 The gem includes a Railtie that will configure everything properly for Rails 3+
