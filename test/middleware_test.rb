@@ -12,6 +12,7 @@ class MiddlewareTest < Minitest::Test
   def call_middleware(opts = {})
     _, _, proxy = @middleware.call(opts)
     proxy.close
+    proxy
   end
 
   def test_middleware_resets_store
@@ -21,6 +22,17 @@ class MiddlewareTest < Minitest::Test
 
     assert_equal 1, @app.last_value
     assert_equal({}, RequestStore.store)
+  end
+
+  def test_middleware_does_not_mutate_response_and_does_not_overflow_stack
+    10000.times do
+      call_middleware
+    end
+
+    resp = call_middleware
+    assert resp.is_a?(::Rack::BodyProxy)
+    assert_equal ["response"], resp.to_a
+    assert_equal ["response"], resp.instance_variable_get(:@body)
   end
 
   def test_middleware_resets_store_on_error
@@ -61,5 +73,29 @@ class MiddlewareTest < Minitest::Test
 
     refute RequestStore.active?
     refute RequestStore.store[:foo]
+  end
+end
+
+class MiddlewareWithConstResponseTest < Minitest::Test
+  def setup
+    @app = RackAppWithConstResponse.new
+    @middleware = RequestStore::Middleware.new(@app)
+  end
+
+  def call_middleware(opts = {})
+    _, _, proxy = @middleware.call(opts)
+    proxy.close
+    proxy
+  end
+
+  def test_middleware_does_not_mutate_response_and_does_not_overflow_stack
+    10000.times do
+      call_middleware
+    end
+
+    resp = call_middleware
+    assert resp.is_a?(::Rack::BodyProxy)
+    assert_equal ["response"], resp.to_a
+    assert_equal ["response"], resp.instance_variable_get(:@body)
   end
 end

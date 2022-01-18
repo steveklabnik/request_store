@@ -16,12 +16,16 @@ module RequestStore
     def call(env)
       RequestStore.begin!
 
-      response = @app.call(env)
+      status, headers, body = @app.call(env)
 
-      returned = response << Rack::BodyProxy.new(response.pop) do
+      body = Rack::BodyProxy.new(body) do
         RequestStore.end!
         RequestStore.clear!
       end
+      
+      returned = true
+
+      [status, headers, body]
     ensure
       unless returned
         RequestStore.end!
