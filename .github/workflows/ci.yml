@@ -1,0 +1,38 @@
+name: CI
+
+on:
+  pull_request:
+
+  push:
+    branches: [master]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        ruby:
+          - 1.9.3
+          - '2.0'
+          - 2.1
+          - 2.2
+          - 2.4
+          - 2.5
+          - 2.6
+          - 2.7
+          - '3.0'
+          - 3.1
+          - ruby-head
+          - jruby-9.1
+          - jruby-9.2
+          - jruby-9.3
+          - jruby-head
+
+    steps:
+    - uses: actions/checkout@v1
+    - uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: ${{ matrix.ruby }}
+        bundler-cache: true # 'bundle install' and cache
+    - name: Test
+      run: bundle exec rake
