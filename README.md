@@ -1,4 +1,4 @@
-# RequestStore [![Code Climate](https://codeclimate.com/github/steveklabnik/request_store.svg)](https://codeclimate.com/github/steveklabnik/request_store)
+# RequestStore [![CI](https://github.com/steveklabnik/request_store/actions/workflows/ci.yml/badge.svg)](https://github.com/steveklabnik/request_store/actions/workflows/ci.yml) [![Code Climate](https://codeclimate.com/github/steveklabnik/request_store.svg)](https://codeclimate.com/github/steveklabnik/request_store)
 
 Ever needed to use a global variable in Rails? Ugh, that's the worst. If you
 need global state, you've probably reached for `Thread.current`. Like this:
