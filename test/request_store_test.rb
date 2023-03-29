@@ -63,9 +63,9 @@ class RequestStoreTest < Minitest::Test
     assert_equal 4, RequestStore.delete(:foo) { 2 + 2 }
   end
 
-  def test_delegates_to_thread
+  def test_delegates_to_scope
     RequestStore.store[:foo] = 1
-    assert_equal 1, Thread.current[:request_store][:foo]
+    assert_equal 1, RequestStore.scope[:request_store][:foo]
   end
 
   def test_active_state
