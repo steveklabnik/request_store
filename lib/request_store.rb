@@ -3,28 +3,38 @@ require "request_store/middleware"
 require "request_store/railtie" if defined?(Rails::Railtie)
 
 module RequestStore
+  if Fiber.respond_to?(:[])
+    def self.scope
+      Fiber
+    end
+  else
+    def self.scope
+      Thread.current
+    end
+  end
+
   def self.store
-    Thread.current[:request_store] ||= {}
+    scope[:request_store] ||= {}
   end
 
   def self.store=(store)
-    Thread.current[:request_store] = store
+    scope[:request_store] = store
   end
 
   def self.clear!
-    Thread.current[:request_store] = {}
+    scope[:request_store] = {}
   end
 
   def self.begin!
-    Thread.current[:request_store_active] = true
+    scope[:request_store_active] = true
   end
 
   def self.end!
-    Thread.current[:request_store_active] = false
+    scope[:request_store_active] = false
   end
 
   def self.active?
-    Thread.current[:request_store_active] || false
+    scope[:request_store_active] || false
   end
 
   def self.read(key)
