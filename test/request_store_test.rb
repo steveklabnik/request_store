@@ -1,6 +1,6 @@
 require 'minitest/autorun'
 
-require 'request_store'
+require_relative '../lib/request_store'
 
 class RequestStoreTest < Minitest::Test
   def setup
@@ -76,5 +76,17 @@ class RequestStoreTest < Minitest::Test
 
     RequestStore.end!
     assert_equal false, RequestStore.active?
+  end
+
+  def test_concurrent_scopes
+    thread1_scope_id = nil
+    thread2_scope_id = nil
+    thread1 = Thread.new { thread1_scope_id = RequestStore.scope.object_id }
+    thread2 = Thread.new { thread2_scope_id = RequestStore.scope.object_id }
+    thread1.join
+    thread2.join
+
+    assert thread1_scope_id != thread2_scope_id,
+           'concurrent scopes should be different'
   end
 end

@@ -3,9 +3,20 @@ require "request_store/middleware"
 require "request_store/railtie" if defined?(Rails::Railtie)
 
 module RequestStore
-  if Fiber.respond_to?(:[])
+  if ::Fiber.respond_to?(:[])
+    class ::Fiber
+      def [](key)
+        (@local_storage || {})[key]
+      end
+
+      def []=(key, value)
+        @local_storage ||= {}
+        @local_storage[key] = value
+      end
+    end
+
     def self.scope
-      Fiber
+      ::Fiber.current
     end
   else
     def self.scope
